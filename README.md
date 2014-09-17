@@ -1,4 +1,4 @@
-FileCreationScript
+FolderCreationScript
 ==============
 
 Bash script to automate folder creation for both client- and server-side modules.
