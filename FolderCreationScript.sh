@@ -1,33 +1,49 @@
 #!/bin/bash
 # Bash script to easily create folders for new client- and server-side modules
-# Read in PATH, LOC (client or server), MODULE (module name) 
+# Read in LOC (client or server), PATH, and MODULES (as many modules as you want to add as space-separated parameters) 
+
 # Example use:
-# FROM ROOT, to add a new module within client/app, write ./fileCreate.sh newModuleName client client/app
-# FROM ROOT, to add a new module within server/api, write ./fileCreate.sh newModuleName server server/api
+# FROM ROOT, to add three new modules within client/app, write ./FolderCreationScript.sh client client/app module1 module2 module3
+# FROM ROOT, to add two new modules within server/api, write ./FolderCreationScript.sh server server/api module1 module2
 
-MODULE=$1
-LOC=$2
-TESTPATH=$3
-DIRPATH=$TESTPATH/$MODULE
+# See the README for more instructions!
 
-echo "Creating files for $MODULE module on $LOC-side in $DIRPATH."
-mkdir $DIRPATH
-cd $DIRPATH
+LOC=$1
+TESTPATH=$2
 
-if [ $LOC = 'client' ] 
-then
-	touch $MODULE.controller.js
-	touch $MODULE.controller.spec.js
-	touch $MODULE.css
-	touch $MODULE.html
-	touch $MODULE.js
-fi
+ARGS=("$@")
+COUNT=$#
+START=2
 
-if [ $LOC = 'server' ] 
-then
-	touch index.js
-	touch $MODULE.controller.js
-	touch $MODULE.model.js
-	touch $MODULE.model.spec.js
-	touch $MODULE.spec.js
-fi
+cd $TESTPATH
+
+while [ $START -lt $COUNT ]; do
+	CURRENTMODULE=${ARGS[$START]}
+
+	echo "Creating files for $CURRENTMODULE module."
+	
+	mkdir $CURRENTMODULE
+	cd $CURRENTMODULE
+
+	if [ $LOC = 'client' ] 
+	then
+		touch $CURRENTMODULE.controller.js
+		touch $CURRENTMODULE.controller.spec.js
+		touch $CURRENTMODULE.css
+		touch $CURRENTMODULE.html
+		touch $CURRENTMODULE.js
+	fi
+
+	if [ $LOC = 'server' ] 
+	then
+		touch index.js
+		touch $CURRENTMODULE.controller.js
+		touch $CURRENTMODULE.model.js
+		touch $CURRENTMODULE.model.spec.js
+		touch $CURRENTMODULE.spec.js
+	fi
+
+	let START=START+1
+	
+	cd ..
+done
